@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Include meta charset, or bad things will happen! -->
+  <meta charset="utf-8" />
+  <title>Bike Shop Search</title>
+  <link rel="stylesheet" href="styles/main.css" type="text/css"/>
+</head>
+
+<body>
+  <input type="text" id="searchTerm" placeholder="Type here">
+  <ul>
+<!-- 
+    <li>
+      <a href="" target=""></a>
+      <button id="">search</button>
+    </li>
+-->
+    <li>
+      <a href="http://www.bike-components.de/en/" target="bc">bike-components.de</a>
+      <button id="bc">&rarr;</button>
+    </li>
+    <li>
+      <a href="http://www.rczbikeshop.com/" target="rcz">rczbikeshop.com</a>
+      <button id="rcz">search</button>
+    </li>
+    <li>
+      <a href="http://www.rosebikes.com/" target="rose">rosebikes.com</a>
+      <button id="rose">search</button>
+    </li>
+    <li>
+      <a href="http://www.bike-discount.de/" target="bike-discount">bike-discount</a>
+      <button id="bike-discount">search</button>
+    </li>
+    <li>
+      <a href="http://www.amazon.co.uk/" target="amazon.co.uk">amazon.co.uk</a>
+      <button id="amazon.co.uk">search</button>
+    </li>
+    <li>
+      <a href="http://www.amazon.de/" target="amazon.de">amazon.de</a>
+      <button id="amazon.de">search</button>
+    </li>
+    <li>
+      <a href="http://www.wiggle.co.uk/" target="wiggle">wiggle</a>
+      <button id="wiggle">search</button>
+    </li>
+    <li>
+      <a href="http://www.chainreactioncycles.com/ro/en" target="crc">chain reaction cycles</a>
+      <button id="crc">search</button>
+    </li>
+    <li>
+      <a href="http://www.planetx.co.uk/" target="planetx">planetx.co.uk</a>
+      <button id="planetx">search</button>
+    </li>
+    <li>
+      <a href="http://www.bike24.com/" target="bike24">bike24.com</a>
+      <button id="bike24">search</button>
+    </li>
+  </ul>
+
+<script type="text/javascript">
+  // search url prefixes
+  var srcUrl = {
+    bc: 'http://www.bike-components.de/advanced_search_result.php/language/en/?limit=48&keywords=',
+    rose: 'http://www.rosebikes.com/search/find/?order=price|asc&count=64&q=',
+    rcz: 'http://www.rczbikeshop.com/default/catalogsearch/result/?dir=asc&order=price&q=',
+    'amazon.co.uk': 'http://www.amazon.co.uk/s/field-keywords=',
+    'amazon.de': 'http://www.amazon.de/s/field-keywords=',
+    wiggle: 'http://www.wiggle.co.uk/?s=',
+    'bike-discount': 'http://www.bike-discount.de/en/praesenz/search/?o=preis&q=mudguard',
+    crc: 'http://www.chainreactioncycles.com/ro/en/s?sort=pricelow&q=',
+    planetx: 'http://www.planetx.co.uk/search-results?keywords=',
+    bike24: 'http://www.bike24.com/1.php?content=13&navigation=1&search=',
+  };
+
+  function getSearchTerm() {
+    return encodeURI(document.getElementById('searchTerm').value);
+  }
+
+  Object.keys(srcUrl).forEach( function (key) {
+    // link onclick action to buttons
+    document.getElementById(key).onclick = function () { 
+      // window.opnen sintax:
+      // var windowObjectReference = window.open(strUrl, strWindowName[, strWindowFeatures]);
+      // strWindowName can be used as the target of links and forms
+      window.open(srcUrl[key] + getSearchTerm(), key);
+    };
+  });
+
+</script>
+
+</body>
+</html>
