@@ -6,3 +6,18 @@ body {
   font-family: sans-serif; 
   font-size: 12px;
 }
+
+
+a {
+  cursor: pointer;
+}
+
+li {
+  list-style: none;
+  height: 30px;
+  text-align: right;
+}
+
+.red {
+  background-color: red;
+}

@@ -8,53 +8,47 @@
 </head>
 
 <body>
-  <input type="text" id="searchTerm" placeholder="Type here">
+  <input type="search" id="searchTerm" placeholder="Type here">
   <ul>
-<!-- 
-    <li>
-      <a href="" target=""></a>
-      <button id="">search</button>
-    </li>
--->
     <li>
       <a href="http://www.bike-components.de/en/" target="bc">bike-components.de</a>
-      <button id="bc">&rarr;</button>
+      <a id="bc"><img src="images/toolbar_find.png"></a>
     </li>
     <li>
       <a href="http://www.rczbikeshop.com/" target="rcz">rczbikeshop.com</a>
-      <button id="rcz">search</button>
+      <a id="rcz"><img src="images/toolbar_find.png"></a>
     </li>
     <li>
       <a href="http://www.rosebikes.com/" target="rose">rosebikes.com</a>
-      <button id="rose">search</button>
+      <a id="rose"><img src="images/toolbar_find.png"></a>
     </li>
     <li>
       <a href="http://www.bike-discount.de/" target="bike-discount">bike-discount</a>
-      <button id="bike-discount">search</button>
+      <a id="bike-discount"><img src="images/toolbar_find.png"></a>
     </li>
     <li>
       <a href="http://www.amazon.co.uk/" target="amazon.co.uk">amazon.co.uk</a>
-      <button id="amazon.co.uk">search</button>
+      <a id="amazon.co.uk"><img src="images/toolbar_find.png"></a>
     </li>
     <li>
       <a href="http://www.amazon.de/" target="amazon.de">amazon.de</a>
-      <button id="amazon.de">search</button>
+      <a id="amazon.de"><img src="images/toolbar_find.png"></a>
     </li>
     <li>
       <a href="http://www.wiggle.co.uk/" target="wiggle">wiggle</a>
-      <button id="wiggle">search</button>
+      <a id="wiggle"><img src="images/toolbar_find.png"></a>
     </li>
     <li>
       <a href="http://www.chainreactioncycles.com/ro/en" target="crc">chain reaction cycles</a>
-      <button id="crc">search</button>
+      <a id="crc"><img src="images/toolbar_find.png"></a>
     </li>
     <li>
       <a href="http://www.planetx.co.uk/" target="planetx">planetx.co.uk</a>
-      <button id="planetx">search</button>
+      <a id="planetx"><img src="images/toolbar_find.png"></a>
     </li>
     <li>
       <a href="http://www.bike24.com/" target="bike24">bike24.com</a>
-      <button id="bike24">search</button>
+      <a id="bike24"><img src="images/toolbar_find.png"></a>
     </li>
   </ul>
 
@@ -78,12 +72,14 @@
   }
 
   Object.keys(srcUrl).forEach( function (key) {
-    // link onclick action to buttons
+    // link onclick action to search links
     document.getElementById(key).onclick = function () { 
       // window.opnen sintax:
       // var windowObjectReference = window.open(strUrl, strWindowName[, strWindowFeatures]);
       // strWindowName can be used as the target of links and forms
       window.open(srcUrl[key] + getSearchTerm(), key);
+      // prevents default behaviour of links
+      // return false;
     };
   });
 
