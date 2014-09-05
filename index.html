@@ -9,81 +9,74 @@
 
 <body>
   <input type="search" id="searchTerm" placeholder="Type here">
-  <ul>
-    <li>
-      <a href="http://www.bike-components.de/en/" target="bc">bike-components.de</a>
-      <a id="bc"><img src="images/toolbar_find.png"></a>
-    </li>
-    <li>
-      <a href="http://www.rczbikeshop.com/" target="rcz">rczbikeshop.com</a>
-      <a id="rcz"><img src="images/toolbar_find.png"></a>
-    </li>
-    <li>
-      <a href="http://www.rosebikes.com/" target="rose">rosebikes.com</a>
-      <a id="rose"><img src="images/toolbar_find.png"></a>
-    </li>
-    <li>
-      <a href="http://www.bike-discount.de/" target="bike-discount">bike-discount</a>
-      <a id="bike-discount"><img src="images/toolbar_find.png"></a>
-    </li>
-    <li>
-      <a href="http://www.amazon.co.uk/" target="amazon.co.uk">amazon.co.uk</a>
-      <a id="amazon.co.uk"><img src="images/toolbar_find.png"></a>
-    </li>
-    <li>
-      <a href="http://www.amazon.de/" target="amazon.de">amazon.de</a>
-      <a id="amazon.de"><img src="images/toolbar_find.png"></a>
-    </li>
-    <li>
-      <a href="http://www.wiggle.co.uk/" target="wiggle">wiggle</a>
-      <a id="wiggle"><img src="images/toolbar_find.png"></a>
-    </li>
-    <li>
-      <a href="http://www.chainreactioncycles.com/ro/en" target="crc">chain reaction cycles</a>
-      <a id="crc"><img src="images/toolbar_find.png"></a>
-    </li>
-    <li>
-      <a href="http://www.planetx.co.uk/" target="planetx">planetx.co.uk</a>
-      <a id="planetx"><img src="images/toolbar_find.png"></a>
-    </li>
-    <li>
-      <a href="http://www.bike24.com/" target="bike24">bike24.com</a>
-      <a id="bike24"><img src="images/toolbar_find.png"></a>
-    </li>
-  </ul>
+  
+  <ul id="list"></ul>
 
-<script type="text/javascript">
-  // search url prefixes
-  var srcUrl = {
-    bc: 'http://www.bike-components.de/advanced_search_result.php/language/en/?limit=48&keywords=',
-    rose: 'http://www.rosebikes.com/search/find/?order=price|asc&count=64&q=',
-    rcz: 'http://www.rczbikeshop.com/default/catalogsearch/result/?dir=asc&order=price&q=',
-    'amazon.co.uk': 'http://www.amazon.co.uk/s/field-keywords=',
-    'amazon.de': 'http://www.amazon.de/s/field-keywords=',
-    wiggle: 'http://www.wiggle.co.uk/?s=',
-    'bike-discount': 'http://www.bike-discount.de/en/praesenz/search/?o=preis&q=mudguard',
-    crc: 'http://www.chainreactioncycles.com/ro/en/s?sort=pricelow&q=',
-    planetx: 'http://www.planetx.co.uk/search-results?keywords=',
-    bike24: 'http://www.bike24.com/1.php?content=13&navigation=1&search=',
-  };
 
-  function getSearchTerm() {
-    return encodeURI(document.getElementById('searchTerm').value);
-  }
+  <script type="text/javascript">
+    // search URLs must have this form: http://www.*************
+    var srcUrls = [
+      'http://www.bike-components.de/advanced_search_result.php/language/en/?limit=48&keywords=',
+      'http://www.rosebikes.com/search/find/?order=price|asc&count=64&q=',
+      'http://www.rczbikeshop.com/default/catalogsearch/result/?dir=asc&order=price&q=',
+      'http://www.amazon.co.uk/s/field-keywords=',
+      'http://www.amazon.de/s/field-keywords=',
+      'http://www.wiggle.co.uk/?s=',
+      'http://www.bike-discount.de/en/praesenz/search/?o=preis&q=',
+      'http://www.chainreactioncycles.com/ro/en/s?sort=pricelow&q=',
+      'http://www.planetx.co.uk/search-results?keywords=',
+      'http://www.bike24.com/1.php?content=13&navigation=1&search=',
+      'http://www.evanscycles.com/search?sort_by=asc&query=',
+    ];
 
-  Object.keys(srcUrl).forEach( function (key) {
-    // link onclick action to search links
-    document.getElementById(key).onclick = function () { 
-      // window.opnen sintax:
-      // var windowObjectReference = window.open(strUrl, strWindowName[, strWindowFeatures]);
-      // strWindowName can be used as the target of links and forms
-      window.open(srcUrl[key] + getSearchTerm(), key);
-      // prevents default behaviour of links
-      // return false;
-    };
-  });
+    // <li>
+    //   <a href="http://www.bike-components.de/en/" target="www.bike-components.de">bike-components.de</a>
+    //   <a><img src="images/toolbar_find.png"></a>
+    // </li>
+    function createList(srcUrls) {
+      var fragment = document.createDocumentFragment();
 
-</script>
+      srcUrls.forEach( function (url, index) {
+        var homepage = getHomepage(url);
+        var htmlListItem = document.createElement('li');
+        var htmlHomepage = document.createElement('a');
+        var htmlSearchLink = document.createElement('a');
+        var htmlImg = document.createElement('img');
 
+        htmlHomepage.appendChild( document.createTextNode( homepage.slice(4)) ); // 'www.homepage.com'.slice(4) == 'homepage.com'
+        htmlHomepage.href = 'http://' + homepage;
+        htmlHomepage.target = homepage;
+        htmlListItem.appendChild( htmlHomepage );
+
+        htmlImg.src = "images/toolbar_find.png";
+        htmlSearchLink.appendChild( htmlImg );
+        htmlSearchLink.onclick = function () {
+          // window.opnen sintax:
+          // var windowObjectReference = window.open(strUrl, strWindowName[, strWindowFeatures]);
+          window.open( url + getSearchTerm(), homepage);
+          // prevents default behaviour of links
+          // return false;
+        };
+        htmlListItem.appendChild( htmlSearchLink );
+
+        fragment.appendChild( htmlListItem );
+      });
+
+      document.getElementById('list').appendChild(fragment);
+    }
+    
+
+    function getSearchTerm() {
+      return encodeURI(document.getElementById('searchTerm').value);
+    }
+
+    function getHomepage(searchUrl) {
+      // 'http://www.wiggle.co.uk/?s='.split('/') == ["http:", "", "www.wiggle.co.uk", "?s="]
+      var urlParts = searchUrl.split('/');
+      return urlParts[2];
+    }
+
+    createList(srcUrls);
+  </script>
 </body>
 </html>
