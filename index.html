@@ -9,34 +9,45 @@
 
 <body>
   <input type="search" id="searchTerm" placeholder="Type here">
-  
-  <ul id="list"></ul>
-
+  <section id="lists"></section>
 
   <script type="text/javascript">
     // search URLs must have this form: http://www.*************
-    var srcUrls = [
-      'http://www.bike-components.de/advanced_search_result.php/language/en/?limit=48&keywords=',
-      'http://www.rosebikes.com/search/find/?order=price|asc&count=64&q=',
-      'http://www.rczbikeshop.com/default/catalogsearch/result/?dir=asc&order=price&q=',
-      'http://www.amazon.co.uk/s/field-keywords=',
-      'http://www.amazon.de/s/field-keywords=',
-      'http://www.wiggle.co.uk/?s=',
-      'http://www.bike-discount.de/en/praesenz/search/?o=preis&q=',
-      'http://www.chainreactioncycles.com/ro/en/s?sort=pricelow&q=',
-      'http://www.planetx.co.uk/search-results?keywords=',
-      'http://www.bike24.com/1.php?content=13&navigation=1&search=',
-      'http://www.evanscycles.com/search?sort_by=asc&query=',
-    ];
+    var srcUrls = {
+                    world: [
+                            'http://www.bike-components.de/advanced_search_result.php/language/en/?limit=48&keywords=',
+                            'http://www.rosebikes.com/search/find/?order=price|asc&count=64&q=',
+                            'http://www.rczbikeshop.com/default/catalogsearch/result/?dir=asc&order=price&q=',
+                            'http://www.amazon.co.uk/s/field-keywords=',
+                            'http://www.amazon.de/s/field-keywords=',
+                            'http://www.wiggle.co.uk/?s=',
+                            'http://www.bike-discount.de/en/praesenz/search/?o=preis&q=',
+                            'http://www.chainreactioncycles.com/ro/en/s?sort=pricelow&q=',
+                            'http://www.planetx.co.uk/search-results?keywords=',
+                            'http://www.bike24.com/1.php?content=13&navigation=1&search=',
+                            'http://www.evanscycles.com/search?sort_by=asc&query=',
+                    ],
+                    ro: [ 'http://www.playbike.ro/cautare.php?ordonare=PretAsc&cautare=',
+                          'http://www.marosbike.ro/index.php5?module=Frontend&action=search&search_value=',
+                          'http://www.bikexpert.ro/5769/pages/rezultate-cautare.aspx?post=1&q=',
+                          'http://www.sportconcept.ro/cautare?catType=0&text_cautare=',
+                          'http://www.bikezone.ro/cauta/',
+                          'http://www.veloteca.ro/catalogsearch/result/index/?dir=asc&order=price&q=',
+                          'http://www.bikexcs.ro/catalogsearch/advanced/result/?types=name&name=pipa',
+                          'http://www.mosionroata.ro/index.html/mainpage%7Csearch?type=products&searchBox=',      
+                    ],
+    };
+    
+    // <ul>
+    //   <li>
+    //     <a href="http://www.bike-components.de/en/" target="www.bike-components.de">bike-components.de</a>
+    //     <a><img src="images/toolbar_find.png"></a>
+    //   </li>
+    // </ul>
+    function createList(srcUriArr, containerId) {
+      var htmlUnorderedlist = document.createElement('ul');
 
-    // <li>
-    //   <a href="http://www.bike-components.de/en/" target="www.bike-components.de">bike-components.de</a>
-    //   <a><img src="images/toolbar_find.png"></a>
-    // </li>
-    function createList(srcUrls) {
-      var fragment = document.createDocumentFragment();
-
-      srcUrls.forEach( function (url, index) {
+      srcUriArr.forEach( function (url, index) {
         var homepage = getHomepage(url);
         var htmlListItem = document.createElement('li');
         var htmlHomepage = document.createElement('a');
@@ -59,10 +70,10 @@
         };
         htmlListItem.appendChild( htmlSearchLink );
 
-        fragment.appendChild( htmlListItem );
+        htmlUnorderedlist.appendChild( htmlListItem );
       });
 
-      document.getElementById('list').appendChild(fragment);
+      document.getElementById(containerId).appendChild(htmlUnorderedlist);
     }
     
 
@@ -76,7 +87,8 @@
       return urlParts[2];
     }
 
-    createList(srcUrls);
+    createList(srcUrls.world, 'lists');
+    createList(srcUrls.ro, 'lists');
   </script>
 </body>
 </html>
