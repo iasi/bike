@@ -29,15 +29,23 @@
                     ],
                     ro: [ 'http://www.playbike.ro/cautare.php?ordonare=PretAsc&cautare=',
                           'http://www.marosbike.ro/index.php5?module=Frontend&action=search&search_value=',
+                          'http://dhsbikeparts.ro/cautare/',
                           'http://www.bikexpert.ro/5769/pages/rezultate-cautare.aspx?post=1&q=',
-                          'http://www.sportconcept.ro/cautare?catType=0&text_cautare=',
+                          'http://sportconcept.ro/cautare?catType=0&text_cautare=',
                           'http://www.bikezone.ro/cauta/',
                           'http://www.veloteca.ro/catalogsearch/result/index/?dir=asc&order=price&q=',
                           'http://www.bikexcs.ro/catalogsearch/advanced/result/?types=name&name=pipa',
                           'http://www.mosionroata.ro/index.html/mainpage%7Csearch?type=products&searchBox=',      
                     ],
+                    bazar: [
+                            'http://www.tocmai.ro/cauta?typ=1&ct=0&jd=0&q=',
+                            'http://olx.ro/oferte/?q=',
+                            'http://www.dirtbike.ro/bazar/cauta?termen=',
+                            'http://www.okazii.ro/cautare/',
+                    ],
     };
     
+
     // <ul>
     //   <li>
     //     <a href="http://www.bike-components.de/en/" target="www.bike-components.de">bike-components.de</a>
@@ -49,12 +57,15 @@
 
       srcUriArr.forEach( function (url, index) {
         var homepage = getHomepage(url);
+        // remove www. prefix if it exists
+        // 'www.homepage.com'.slice(4) == 'homepage.com'
+        var homepageStr = (homepage.substring(0,4) == 'www.') ? homepage.slice(4) : homepage; 
         var htmlListItem = document.createElement('li');
         var htmlHomepage = document.createElement('a');
         var htmlSearchLink = document.createElement('a');
         var htmlImg = document.createElement('img');
 
-        htmlHomepage.appendChild( document.createTextNode( homepage.slice(4)) ); // 'www.homepage.com'.slice(4) == 'homepage.com'
+        htmlHomepage.appendChild( document.createTextNode(homepageStr) ); 
         htmlHomepage.href = 'http://' + homepage;
         htmlHomepage.target = homepage;
         htmlListItem.appendChild( htmlHomepage );
@@ -81,14 +92,18 @@
       return encodeURI(document.getElementById('searchTerm').value);
     }
 
+
     function getHomepage(searchUrl) {
       // 'http://www.wiggle.co.uk/?s='.split('/') == ["http:", "", "www.wiggle.co.uk", "?s="]
       var urlParts = searchUrl.split('/');
       return urlParts[2];
     }
 
-    createList(srcUrls.world, 'lists');
-    createList(srcUrls.ro, 'lists');
+
+    // main
+    for (var key in srcUrls) {
+      createList(srcUrls[key], 'lists');
+    }
   </script>
 </body>
 </html>
