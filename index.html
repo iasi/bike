@@ -8,14 +8,15 @@
 </head>
 
 <body>
-  <input type="search" id="searchTerm" placeholder="Type here">
+  <input type="search" id="searchTerm" placeholder="Type here" autofocus>
   <section id="lists"></section>
 
   <script type="text/javascript">
-    // search URLs must have this form: http://www.*************
-    var srcUrls = {
-                    world: [
-                            'http://www.bike-components.de/advanced_search_result.php/language/en/?limit=48&keywords=',
+    // search URLs
+    // either a string starting with 'http://' or an object like: 
+    // { homepageTxt: 'dirtbike.ro',  homepageUrl: 'http://*',  srcUrl: 'http://*' }
+    var sites = {
+                  world: [  'http://www.bike-components.de/advanced_search_result.php/language/en/?limit=48&keywords=',
                             'http://www.rosebikes.com/search/find/?order=price|asc&count=64&q=',
                             'http://www.rczbikeshop.com/default/catalogsearch/result/?dir=asc&order=price&q=',
                             'http://www.amazon.co.uk/s/field-keywords=',
@@ -26,23 +27,26 @@
                             'http://www.planetx.co.uk/search-results?keywords=',
                             'http://www.bike24.com/1.php?content=13&navigation=1&search=',
                             'http://www.evanscycles.com/search?sort_by=asc&query=',
-                    ],
-                    ro: [ 'http://www.playbike.ro/cautare.php?ordonare=PretAsc&cautare=',
-                          'http://www.marosbike.ro/index.php5?module=Frontend&action=search&search_value=',
-                          'http://dhsbikeparts.ro/cautare/',
-                          'http://www.bikexpert.ro/5769/pages/rezultate-cautare.aspx?post=1&q=',
-                          'http://sportconcept.ro/cautare?catType=0&text_cautare=',
-                          'http://www.bikezone.ro/cauta/',
-                          'http://www.veloteca.ro/catalogsearch/result/index/?dir=asc&order=price&q=',
-                          'http://www.bikexcs.ro/catalogsearch/advanced/result/?types=name&name=pipa',
-                          'http://www.mosionroata.ro/index.html/mainpage%7Csearch?type=products&searchBox=',      
-                    ],
-                    bazar: [
-                            'http://www.tocmai.ro/cauta?typ=1&ct=0&jd=0&q=',
+                  ],
+                  ro: [ 'http://www.playbike.ro/cautare.php?ordonare=PretAsc&cautare=',
+                        'http://www.marosbike.ro/index.php5?module=Frontend&action=search&search_value=',
+                        'http://dhsbikeparts.ro/cautare/',
+                        'http://www.bikexpert.ro/5769/pages/rezultate-cautare.aspx?post=1&q=',
+                        'http://sportconcept.ro/cautare?catType=0&text_cautare=',
+                        'http://www.bikezone.ro/cauta/',
+                        'http://www.veloteca.ro/catalogsearch/result/index/?dir=asc&order=price&q=',
+                        'http://www.bikexcs.ro/catalogsearch/advanced/result/?types=name&name=pipa',
+                        'http://www.mosionroata.ro/index.html/mainpage%7Csearch?type=products&searchBox=',
+                  ],
+                  bazar: [  'http://www.tocmai.ro/cauta?typ=1&ct=0&jd=0&q=',
                             'http://olx.ro/oferte/?q=',
-                            'http://www.dirtbike.ro/bazar/cauta?termen=',
+                            { homepageTxt: 'dirtbike.ro',
+                              homepageUrl: 'http://www.dirtbike.ro/bazar/anunturi-noi',
+                              srcUrl: 'http://www.dirtbike.ro/bazar/cauta?termen=' },
                             'http://www.okazii.ro/cautare/',
-                    ],
+                            'http://www.ebay.de/sch/i.html?_sacat=0&_nkw=',
+                            'http://www.ebay.co.uk/sch/i.html?_sacat=0&_nkw=',
+                  ],
     };
     
 
@@ -52,22 +56,31 @@
     //     <a><img src="images/toolbar_find.png"></a>
     //   </li>
     // </ul>
-    function createList(srcUriArr, containerId) {
+    function createList(sitesArr, containerId) {
       var htmlUnorderedlist = document.createElement('ul');
 
-      srcUriArr.forEach( function (url, index) {
-        var homepage = getHomepage(url);
-        // remove www. prefix if it exists
-        // 'www.homepage.com'.slice(4) == 'homepage.com'
-        var homepageStr = (homepage.substring(0,4) == 'www.') ? homepage.slice(4) : homepage; 
+      sitesArr.forEach( function (site) {
+        if (typeof site == 'object') {
+          var homepageUrl = site.homepageUrl.slice(7); // remove 'http://' prefix
+          var homepageTxt = site.homepageTxt;
+          var srcUrl = site.srcUrl;
+        } 
+        else {
+          var srcUrl = site;
+          // the host part of the URL is also the homepageUrl
+          var homepageUrl = getUrlHost(site);
+          // remove 'www.' prefix if it exists
+          // 'www.homepage.com'.slice(4) == 'homepage.com'
+          var homepageTxt = (homepageUrl.substring(0,4) == 'www.') ? homepageUrl.slice(4) : homepageUrl; 
+        }
         var htmlListItem = document.createElement('li');
         var htmlHomepage = document.createElement('a');
         var htmlSearchLink = document.createElement('a');
         var htmlImg = document.createElement('img');
 
-        htmlHomepage.appendChild( document.createTextNode(homepageStr) ); 
-        htmlHomepage.href = 'http://' + homepage;
-        htmlHomepage.target = homepage;
+        htmlHomepage.appendChild( document.createTextNode(homepageTxt) ); 
+        htmlHomepage.href = 'http://' + homepageUrl;
+        htmlHomepage.target = homepageTxt;
         htmlListItem.appendChild( htmlHomepage );
 
         htmlImg.src = "images/toolbar_find.png";
@@ -75,7 +88,7 @@
         htmlSearchLink.onclick = function () {
           // window.opnen sintax:
           // var windowObjectReference = window.open(strUrl, strWindowName[, strWindowFeatures]);
-          window.open( url + getSearchTerm(), homepage);
+          window.open( srcUrl + getSearchTerm(), homepageTxt);
           // prevents default behaviour of links
           // return false;
         };
@@ -93,7 +106,7 @@
     }
 
 
-    function getHomepage(searchUrl) {
+    function getUrlHost(searchUrl) {
       // 'http://www.wiggle.co.uk/?s='.split('/') == ["http:", "", "www.wiggle.co.uk", "?s="]
       var urlParts = searchUrl.split('/');
       return urlParts[2];
@@ -101,8 +114,8 @@
 
 
     // main
-    for (var key in srcUrls) {
-      createList(srcUrls[key], 'lists');
+    for (var key in sites) {
+      createList(sites[key], 'lists');
     }
   </script>
 </body>
